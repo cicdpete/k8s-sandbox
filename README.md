@@ -47,12 +47,6 @@ In another terminal:
 
 ### forward load balancer
 
-
-# flaskwebapp deployment
-## deployment
-Copy and paste manifest from https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-and modify to suit.
-
 # Docker
 ## build docker image
 Instead of using the Docker Hub image devopsjourney1/mywebapp, I modified his Dockerfile to address vulnerabilities and reduce the attack surface.
@@ -60,6 +54,7 @@ Instead of using the Docker Hub image devopsjourney1/mywebapp, I modified his Do
 build:
 - `cd flaskapp`
 - `docker build -t flaskapp:latest .`
+- `minikube image load flaskapp:latest`
 
 ## image scanning
 ### install scanner using npm
@@ -89,6 +84,32 @@ reference: https://app.snyk.io/org/cicdpete/flow/connect-code
 - scan
     - `snyk container test docker-hub-repo/image-name`
     - `snyk container test local-image-name`
+
+## Docker context switching
+To inspect docker images within minikube:
+- `eval $(minikube docker-env)`
+
+To switch back to the local docker context:
+- `eval $(minikube docker-env -u)`
+
+# flaskapp deployment
+## deployment
+Copy and paste manifest from https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+and modify to suit.
+
+deploy:
+- `k apply -f k8s/deployments/flaskapp.yaml`
+- `k get deployments`
+- `k get pods`
+- `k describe pods`
+
+Deployments are an abstraction above ReplicaSets. Deployments allow rolling updates.
+- `k get replicaset`
+
+
+## removal
+delete:
+- `k delete -f k8s/deployments/flaskapp.yaml`
 
 # references
 - Partially from Kubernetes tutorial, YouTuber: DevOps Journey https://github.com/devopsjourney1/learn-k8s
