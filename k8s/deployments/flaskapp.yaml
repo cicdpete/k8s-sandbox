@@ -1,24 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mydeployment
+  name: flaskapp-deployment
   labels:
-    app: mywebapp
+    app: flaskapp
     tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mywebapp
+      app: flaskapp
       tier: frontend
   template:
     metadata:
       labels:
-        app: mywebapp
+        app: flaskapp
         tier: frontend
     spec:
       containers:
-      - name: mycontainer
-        image: devopsjourney1/mywebapp
+      - name: flaskapp-container
+        image: flaskapp:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
