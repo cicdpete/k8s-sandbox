@@ -106,7 +106,6 @@ deploy:
 Deployments are an abstraction above ReplicaSets. Deployments allow rolling updates.
 - `k get replicaset`
 
-
 ## removal
 delete:
 - `k delete -f k8s/deployments/flaskapp.yaml`
