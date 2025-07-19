@@ -110,8 +110,47 @@ Deployments are an abstraction above ReplicaSets. Deployments allow rolling upda
 delete:
 - `k delete -f k8s/deployments/flaskapp.yaml`
 
+# grafana
+## Deploy
+1. Add Helm repo
+```
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
+
+2. Helm install
+```
+helm install grafana grafana/grafana \
+  -f k8s/deployments/grafana/values.yaml \
+  --namespace monitoring \
+  --create-namespace
+```
+
+3. get admin password by running:
+```
+kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+4. The Grafana server can be accessed via port 3000 on the following DNS name from within your cluster:
+
+   grafana.monitoring.svc.cluster.local
+
+   Get the Grafana URL to visit by running these commands in the same shell:
+     ```
+     export GRAFANA_SERVICE_IP=$(kubectl get svc --namespace monitoring grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+     http://$GRAFANA_SERVICE_IP:3000
+     ```
+
+## to re-deploy
+After making changes to values.yaml, redeploy using:
+```
+helm upgrade grafana grafana/grafana \
+  -f k8s/deployments/grafana/values.yaml \
+  --namespace monitoring
+```
+
 # references
-- Partially from Kubernetes tutorial, YouTuber: DevOps Journey https://github.com/devopsjourney1/learn-k8s
 - Installing minikube: https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fdebian+package
 - Installing kubectl: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
+- DevOps Journey https://github.com/devopsjourney1/learn-k8s
 
