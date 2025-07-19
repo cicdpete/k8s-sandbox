@@ -1,5 +1,10 @@
 # k8s-sandbox
-k8s deployment using manifests
+k8s sandbox
+
+## Deployments in this repo
+1. grafana: deployed using the official Helm chart
+1. hello-echo: echoes back http requests
+
 
 # command reference
 
